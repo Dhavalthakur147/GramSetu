@@ -1,0 +1,80 @@
+{% extends "base_public.html" %}
+{% set active_page = 'complaints' %}
+
+{% block title %}{{ t("Complaints - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Complaint Desk") }}</p>
+    <h1>{{ t("Submit and Track Village Complaints") }}</h1>
+    <p>{{ t("Report civic issues and track real-time complaint status with your complaint ID.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap">
+    <h2>{{ t("Complaint Form") }}</h2>
+
+    {% if complaint_error %}
+    <div class="alert error">{{ complaint_error }}</div>
+    {% endif %}
+
+    {% if complaint_submission %}
+    <div class="result-card">
+      <h3>{{ t("Complaint Registered") }}</h3>
+      <p><strong>{{ t("Complaint ID") }}:</strong> {{ complaint_submission.complaint_id }}</p>
+      <p><strong>{{ t("Status") }}:</strong> <span class="status-badge status-{{ complaint_submission.status }}">{{ status_text(complaint_submission.status) }}</span></p>
+      <p><strong>{{ t("Assigned Department") }}:</strong> {{ complaint_submission.assigned_department }}</p>
+      <p><strong>Uploaded Evidence:</strong> {{ complaint_submission.document_count or 0 }}</p>
+    </div>
+    {% endif %}
+
+    <form class="form ik-panel" method="post" enctype="multipart/form-data">
+      <div class="grid form-grid">
+        <label>{{ t("Full Name") }}<input type="text" name="full_name" required></label>
+        <label>{{ t("Mobile Number") }}<input type="tel" name="mobile" required></label>
+        <label>{{ t("Email") }}<input type="email" name="email"></label>
+        <label>{{ t("Complaint Category") }}<input type="text" name="category" required></label>
+        <label>{{ t("Location / Ward") }}<input type="text" name="location" required></label>
+        <label>{{ t("Complaint Details") }}<textarea name="details" rows="4" required></textarea></label>
+      </div>
+      <label>Upload Evidence
+        <input type="file" name="supporting_evidence" multiple>
+      </label>
+      <button class="btn primary" type="submit">{{ t("Submit Complaint") }}</button>
+    </form>
+  </div>
+</section>
+
+<section class="ik-section ik-alt">
+  <div class="ik-wrap">
+    <h2>{{ t("Track Complaint Status") }}</h2>
+
+    {% if tracking_error %}
+    <div class="alert error">{{ tracking_error }}</div>
+    {% endif %}
+
+    <form class="form ik-panel" method="get" action="{{ url_for('complaints') }}">
+      <div class="grid form-grid">
+        <label>{{ t("Complaint ID") }}<input type="text" name="complaint_id" value="{{ requested_complaint_id or '' }}" required></label>
+        <label>{{ t("Registered Mobile") }}<input type="tel" name="mobile" value="{{ requested_mobile or '' }}" required></label>
+      </div>
+      <button class="btn ghost" type="submit">{{ t("Check Status") }}</button>
+    </form>
+
+    {% if tracked_complaint %}
+    <div class="result-card">
+      <h3>{{ t("Complaint Status") }}</h3>
+      <p><strong>{{ t("Complaint ID") }}:</strong> {{ tracked_complaint.complaint_id }}</p>
+      <p><strong>{{ t("Category") }}:</strong> {{ tracked_complaint.category }}</p>
+      <p><strong>{{ t("Location") }}:</strong> {{ tracked_complaint.location }}</p>
+      <p><strong>{{ t("Status") }}:</strong> <span class="status-badge status-{{ tracked_complaint.status }}">{{ status_text(tracked_complaint.status) }}</span></p>
+      <p><strong>{{ t("Department") }}:</strong> {{ tracked_complaint.assigned_department }}</p>
+      <p><strong>{{ t("Last Updated") }}:</strong> {{ tracked_complaint.updated_at }}</p>
+      <p><strong>Uploaded Evidence:</strong> {{ tracked_complaint.document_count or 0 }}</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

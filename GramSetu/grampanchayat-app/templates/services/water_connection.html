@@ -1,0 +1,44 @@
+{% extends "base_public.html" %}
+{% set active_page = 'services' %}
+
+{% block title %}{{ t("Water Connection - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Service Application") }}</p>
+    <h1>{{ t("Water Connection Request") }}</h1>
+    <p>{{ t("Fill in details to generate your digital request ID.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap">
+    {% if submission_error %}<div class="alert error">{{ submission_error }}</div>{% endif %}
+
+    {% if submission %}
+    <div class="result-card">
+      <h3>{{ t("Request Submitted") }}</h3>
+      <p><strong>{{ t("Request ID") }}:</strong> {{ submission.request_id }}</p>
+      <p><strong>{{ t("Status") }}:</strong> <span class="status-badge status-{{ submission.status }}">{{ status_text(submission.status) }}</span></p>
+      <p><strong>Uploaded Documents:</strong> {{ submission.document_count or 0 }}</p>
+      <a class="btn ghost" href="{{ url_for('track_service_request', request_id=submission.request_id, mobile=submission.mobile) }}">{{ t("Track This Request") }}</a>
+    </div>
+    {% endif %}
+
+    <form class="form ik-panel" method="post" enctype="multipart/form-data">
+      <div class="grid form-grid">
+        <label>{{ t("Applicant Name") }}<input type="text" name="applicant_name" required></label>
+        <label>{{ t("Address") }}<input type="text" name="address" required></label>
+        <label>{{ t("Purpose") }}<input type="text" name="purpose" required></label>
+        <label>{{ t("Mobile Number") }}<input type="tel" name="mobile" required></label>
+        <label>{{ t("Email") }}<input type="email" name="email"></label>
+      </div>
+      <label>Supporting Documents
+        <input type="file" name="supporting_documents" multiple>
+      </label>
+      <button class="btn primary" type="submit">{{ t("Submit Request") }}</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base_admin.html" %}
+{% set active_page = 'admin_applications' %}
+
+{% block title %}Manage Applications - Admin{% endblock %}
+
+{% block content %}
+<section class="ik-admin-section">
+  <div class="ik-wrap">
+    <h1>Manage Applications</h1>
+
+    {% if admin_message %}
+    <div class="alert">{{ admin_message }}</div>
+    {% endif %}
+
+    <form class="form ik-panel" method="get">
+      <div class="grid form-grid">
+        <label>Status Filter
+          <select name="status">
+            <option value="" {% if not active_filter %}selected{% endif %}>All</option>
+            {% for item in status_options %}
+            <option value="{{ item }}" {% if active_filter == item %}selected{% endif %}>{{ item.replace('_', ' ')|title }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+      <button class="btn ghost" type="submit">Apply Filter</button>
+    </form>
+
+    <div class="table">
+      <div class="table-row table-6 head"><div>Request ID</div><div>Applicant</div><div>Service</div><div>Status</div><div>Submitted</div><div>Action</div></div>
+      {% for row in applications %}
+      <div class="table-row table-6">
+        <div>{{ row.request_id }}</div>
+        <div>{{ row.applicant_name }}</div>
+        <div>{{ row.service_name }}</div>
+        <div><span class="status-badge status-{{ row.status }}">{{ row.status.replace('_', ' ')|title }}</span></div>
+        <div>{{ row.submitted_at }}</div>
+        <div>
+          {% if row.documents %}
+          <div class="actions">
+            {% for doc in row.documents %}
+            <a class="btn ghost" href="{{ url_for('admin_download_document', document_id=doc.id) }}">{{ doc.original_name }}</a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="ik-muted">No documents</p>
+          {% endif %}
+          <form method="post" class="inline-form">
+            <input type="hidden" name="request_id" value="{{ row.request_id }}">
+            <select name="status" required>
+              {% for item in status_options %}
+              <option value="{{ item }}" {% if row.status == item %}selected{% endif %}>{{ item.replace('_', ' ')|title }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn primary" type="submit">Update</button>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <div class="table-row table-6"><div>No applications found.</div><div>-</div><div>-</div><div>-</div><div>-</div><div>-</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

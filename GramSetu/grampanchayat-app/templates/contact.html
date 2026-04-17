@@ -1,0 +1,40 @@
+{% extends "base_public.html" %}
+{% set active_page = 'contact' %}
+
+{% block title %}{{ t("Contact - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Contact Us") }}</p>
+    <h1>{{ t("Get in Touch") }}</h1>
+    <p>{{ t("Reach Sakhwaniya Gram Panchayat office for support and queries.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-contact-grid">
+    <div class="ik-panel">
+      <h3>{{ t("Office Address") }}</h3>
+      <p>Sakhwaniya Gram Panchayat Office, Sakhwaniya, Gujarat, India</p>
+      <h3>{{ t("Phone") }}</h3>
+      <p>+91-00000-00000</p>
+      <h3>{{ t("Email") }}</h3>
+      <p>contact@sakhwaniya.gov.in</p>
+      <h3>{{ t("Office Hours") }}</h3>
+      <p>{{ t("Mon-Sat, 10:00 AM - 5:00 PM") }}</p>
+    </div>
+    <div class="ik-panel map-panel">
+      <iframe
+        title="{{ t('Sakhwaniya Gram Panchayat Map') }}"
+        src="https://maps.google.com/maps?q=Sakhwaniya%20Gram%20Panchayat&t=&z=13&ie=UTF8&iwloc=&output=embed"
+        width="100%"
+        height="360"
+        style="border:0; border-radius: 12px;"
+        allowfullscreen=""
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</section>
+{% endblock %}

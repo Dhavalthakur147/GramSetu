@@ -1,0 +1,163 @@
+{% extends "base_public.html" %}
+{% set active_page = 'home' %}
+
+{% block title %}{{ t("GramSetu - iKhedut Style Portal") }}{% endblock %}
+
+{% block content %}
+<section id="home" class="ik-hero">
+  <div class="ik-hero-layer"></div>
+  <div class="ik-wrap ik-hero-content">
+    <p class="ik-kicker">{{ t("Digital Agriculture Mission") }}</p>
+    <h1>{{ t("Farmer First Online Services Portal") }}</h1>
+    <p>
+      {{ t("Apply for certificates, register complaints, track requests, and view real-time rural service updates from one digital platform.") }}
+    </p>
+    <div class="ik-cta-row">
+      <a class="ik-btn ik-btn-primary" href="/services">{{ t("Farmer Registration") }}</a>
+      <a class="ik-btn" href="/services">{{ t("Apply Schemes") }}</a>
+      <a class="ik-btn" href="/dashboard">{{ t("Live Dashboard") }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="ik-stats">
+  <div class="ik-wrap ik-grid-4">
+    <article>
+      <h3>{{ digital_metrics.total_requests }}</h3>
+      <p>{{ t("Total Applications") }}</p>
+    </article>
+    <article>
+      <h3>{{ digital_metrics.pending_requests }}</h3>
+      <p>{{ t("Under Process") }}</p>
+    </article>
+    <article>
+      <h3>{{ digital_metrics.total_complaints }}</h3>
+      <p>{{ t("Total Complaints") }}</p>
+    </article>
+    <article>
+      <h3>{{ digital_metrics.digital_efficiency }}%</h3>
+      <p>{{ t("Digital Efficiency") }}</p>
+    </article>
+  </div>
+</section>
+
+<section id="about" class="ik-section">
+  <div class="ik-wrap ik-about-grid">
+    <div class="ik-about-image">
+      <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=80" alt="{{ t('Farm field') }}" />
+    </div>
+    <div>
+      <p class="ik-kicker">{{ t("About Portal") }}</p>
+      <h2>{{ t("Integrated e-Governance for Farmers") }}</h2>
+      <p>
+        {{ t("This portal is inspired by iKhedut-style digital flow where farmers can access government services, submit scheme applications, and track each process through transparent status updates.") }}
+      </p>
+      <ul class="ik-list">
+        <li>{{ t("Single-window online applications") }}</li>
+        <li>{{ t("Complaint registration and status tracking") }}</li>
+        <li>{{ t("Department-wise scheme discovery") }}</li>
+        <li>{{ t("Citizen + admin digital dashboards") }}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="news" class="ik-section ik-alt">
+  <div class="ik-wrap ik-news-grid">
+    <div class="ik-news-box">
+      <div class="ik-title-row">
+        <h3>{{ t("Latest News") }}</h3>
+        <a href="/notices">{{ t("View All") }}</a>
+      </div>
+      <div class="ik-marquee">
+        <ul>
+          <li><strong>{{ t("15 Apr 2026:") }}</strong> {{ t("New cycle for water connection online requests has started.") }}</li>
+          <li><strong>{{ t("12 Apr 2026:") }}</strong> {{ t("Gram Sabha circular uploaded with village development agenda.") }}</li>
+          <li><strong>{{ t("09 Apr 2026:") }}</strong> {{ t("Digital complaint response timeline reduced for priority cases.") }}</li>
+          <li><strong>{{ t("05 Apr 2026:") }}</strong> {{ t("Farmer support camp schedule published in notices section.") }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ik-msg-box">
+      <h3>{{ t("Public Messages") }}</h3>
+      <div class="ik-msg-list">
+        <article>
+          <h4>Shri Narendra Modi</h4>
+          <p>{{ t("Hon'ble Prime Minister, Government of India") }}</p>
+        </article>
+        <article>
+          <h4>Shri Bhupendra Patel</h4>
+          <p>{{ t("Hon'ble Chief Minister, Government of Gujarat") }}</p>
+        </article>
+        <article>
+          <h4>Shri Jitubhai Vaghani</h4>
+          <p>{{ t("Agriculture & Farmers Welfare Department") }}</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="schemes" class="ik-section">
+  <div class="ik-wrap">
+    <p class="ik-kicker center">{{ t("Departments & Schemes") }}</p>
+    <h2 class="ik-center">{{ t("Krishi Vibhag Quick Access") }}</h2>
+    <div class="ik-scheme-grid">
+      <a class="ik-scheme-card" href="/services/birth-certificate">
+        <span aria-hidden="true">&#127806;</span>
+        <h4>{{ t("Farmer Registration") }}</h4>
+        <p>{{ t("Digital profile and service enrollment.") }}</p>
+      </a>
+      <a class="ik-scheme-card" href="/services/income-certificate">
+        <span aria-hidden="true">&#128668;</span>
+        <h4>{{ t("Subsidy Application") }}</h4>
+        <p>{{ t("Department-wise subsidy workflow.") }}</p>
+      </a>
+      <a class="ik-scheme-card" href="/services/water-connection">
+        <span aria-hidden="true">&#128167;</span>
+        <h4>{{ t("Irrigation Support") }}</h4>
+        <p>{{ t("Water and agriculture utility requests.") }}</p>
+      </a>
+      <a class="ik-scheme-card" href="/complaints">
+        <span aria-hidden="true">&#9888;</span>
+        <h4>{{ t("Issue Reporting") }}</h4>
+        <p>{{ t("File local infrastructure complaints.") }}</p>
+      </a>
+      <a class="ik-scheme-card" href="/dashboard">
+        <span aria-hidden="true">&#128202;</span>
+        <h4>{{ t("Track Status") }}</h4>
+        <p>{{ t("Check digital progress in real-time.") }}</p>
+      </a>
+      <a class="ik-scheme-card" href="{{ url_for('admin_login') }}">
+        <span aria-hidden="true">&#127970;</span>
+        <h4>{{ t("Department Login") }}</h4>
+        <p>{{ t("Admin panel for request processing.") }}</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="videos" class="ik-section ik-alt">
+  <div class="ik-wrap">
+    <div class="ik-title-row">
+      <h2>{{ t("Important Videos") }}</h2>
+      <a href="https://www.youtube.com/results?search_query=agriculture+scheme+guidance" target="_blank" rel="noopener noreferrer">{{ t("More Videos") }}</a>
+    </div>
+    <div class="ik-video-grid">
+      <a href="https://www.youtube.com/watch?v=4f9Kf0L0f8g" target="_blank" rel="noopener noreferrer">
+        <img src="https://images.unsplash.com/photo-1492496913980-501348b61469?auto=format&fit=crop&w=900&q=80" alt="{{ t('Video 1') }}" />
+        <p>{{ t("How to apply for agriculture benefits online") }}</p>
+      </a>
+      <a href="https://www.youtube.com/watch?v=G7zWQnS9j3M" target="_blank" rel="noopener noreferrer">
+        <img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=900&q=80" alt="{{ t('Video 2') }}" />
+        <p>{{ t("Digital farming records and document checklist") }}</p>
+      </a>
+      <a href="https://www.youtube.com/watch?v=8NzwKQvY4FQ" target="_blank" rel="noopener noreferrer">
+        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80" alt="{{ t('Video 3') }}" />
+        <p>{{ t("Village grievance reporting tutorial") }}</p>
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

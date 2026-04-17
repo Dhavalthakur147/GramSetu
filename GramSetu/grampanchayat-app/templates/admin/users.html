@@ -1,0 +1,108 @@
+{% extends "base_admin.html" %}
+{% set active_page = 'admin_users' %}
+
+{% block title %}Manage Users - Admin{% endblock %}
+
+{% block content %}
+<section class="ik-admin-section">
+  <div class="ik-wrap ik-stack">
+    <div>
+      <h1>Manage Users</h1>
+      <p class="ik-muted">Create staff accounts, promote citizens, and control access status from one place.</p>
+    </div>
+
+    {% if admin_message %}
+    <div class="alert">{{ admin_message }}</div>
+    {% endif %}
+    {% if admin_error %}
+    <div class="alert error">{{ admin_error }}</div>
+    {% endif %}
+
+    <div class="ik-panel">
+      <div class="ik-title-row">
+        <h2>Create User</h2>
+      </div>
+      <form class="form ik-stack" method="post">
+        <input type="hidden" name="action" value="create">
+        <div class="grid form-grid">
+          <label>Full Name
+            <input type="text" name="full_name" required>
+          </label>
+          <label>Mobile Number
+            <input type="tel" name="mobile" required>
+          </label>
+          <label>Email
+            <input type="email" name="email">
+          </label>
+          <label>Password
+            <input type="password" name="password" required>
+          </label>
+          <label>Role
+            <select name="role">
+              {% for role in role_options %}
+              <option value="{{ role }}">{{ role.title() }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>Status
+            <select name="status">
+              {% for status in status_options %}
+              <option value="{{ status }}">{{ status.title() }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="submit">Create User</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="ik-panel">
+      <h2>User Access Matrix</h2>
+      <div class="table">
+        <div class="table-row table-5 head"><div>User</div><div>Contact</div><div>Role</div><div>Status</div><div>Action</div></div>
+        {% for user in users %}
+        <div class="table-row table-5">
+          <div>
+            <strong>{{ user.full_name }}</strong>
+            {% if auth_user and auth_user.id == user.id %}
+            <p class="ik-muted">Current session</p>
+            {% endif %}
+          </div>
+          <div>
+            <div>{{ user.mobile }}</div>
+            <div class="ik-muted">{{ user.email or 'No email' }}</div>
+          </div>
+          <div>{{ user.role.title() }}</div>
+          <div>
+            <span class="ik-badge {% if user.status == 'active' %}live{% else %}offline{% endif %}">
+              {{ user.status.title() }}
+            </span>
+          </div>
+          <div>
+            <form method="post" class="inline-form">
+              <input type="hidden" name="action" value="update">
+              <input type="hidden" name="user_id" value="{{ user.id }}">
+              <select name="role">
+                {% for role in role_options %}
+                <option value="{{ role }}" {% if user.role == role %}selected{% endif %}>{{ role.title() }}</option>
+                {% endfor %}
+              </select>
+              <select name="status">
+                {% for status in status_options %}
+                <option value="{{ status }}" {% if user.status == status %}selected{% endif %}>{{ status.title() }}</option>
+                {% endfor %}
+              </select>
+              <button class="btn primary" type="submit">Save</button>
+            </form>
+          </div>
+        </div>
+        {% else %}
+        <div class="table-row table-5"><div>No users available.</div><div>-</div><div>-</div><div>-</div><div>-</div></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base_public.html" %}
+{% set active_page = 'about' %}
+
+{% block title %}{{ t("About - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("About Village") }}</p>
+    <h1>{{ t("Sakhwaniya Gram Panchayat") }}</h1>
+    <p>{{ t("Transparent governance, digital inclusion, and community-driven development.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-about-grid">
+    <div class="ik-about-image">
+      <img src="https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=900&q=80" alt="{{ t('Village') }}" />
+    </div>
+    <div>
+      <h2>{{ t("About Village") }}</h2>
+      <p>
+        {{ t("Sakhwaniya is known for agriculture, public participation, and inclusive local planning. Gram Sabha meetings and digital processes now work together to improve service delivery.") }}
+      </p>
+      <ul class="ik-list">
+        <li>{{ t("Community-first development model") }}</li>
+        <li>{{ t("Digital service access for citizens") }}</li>
+        <li>{{ t("Focus on sanitation, water and education") }}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="ik-section ik-alt">
+  <div class="ik-wrap">
+    <h2 class="ik-center">{{ t("Vision & Mission") }}</h2>
+    <div class="ik-scheme-grid">
+      <article class="ik-scheme-card">
+        <h4>{{ t("Vision") }}</h4>
+        <p>{{ t("A sustainable and empowered Sakhwaniya where every citizen thrives.") }}</p>
+      </article>
+      <article class="ik-scheme-card">
+        <h4>{{ t("Mission") }}</h4>
+        <p>{{ t("Deliver transparent services and strengthen local infrastructure.") }}</p>
+      </article>
+      <article class="ik-scheme-card">
+        <h4>{{ t("Governance") }}</h4>
+        <p>{{ t("Digital-first, accountable, and participatory Panchayat operations.") }}</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

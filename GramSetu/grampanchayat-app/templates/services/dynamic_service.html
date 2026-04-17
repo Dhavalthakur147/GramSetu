@@ -1,0 +1,128 @@
+{% extends "base_public.html" %}
+{% set active_page = 'services' %}
+
+{% block title %}{{ scheme.title }} - GramSetu{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ scheme.department }}</p>
+    <h1>{{ scheme.title }}</h1>
+    <p>{{ scheme.summary }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-service-layout">
+    <div class="ik-panel">
+      {% if submission_error %}
+      <div class="alert error">{{ submission_error }}</div>
+      {% endif %}
+
+      {% if submission %}
+      <div class="result-card">
+        <h3>{{ t("Application Submitted") }}</h3>
+        <p><strong>{{ t("Request ID") }}:</strong> {{ submission.request_id }}</p>
+        <p><strong>{{ t("Service") }}:</strong> {{ scheme.title }}</p>
+        <p><strong>{{ t("Status") }}:</strong> <span class="status-badge status-{{ submission.status }}">{{ status_text(submission.status) }}</span></p>
+        <p><strong>Uploaded Documents:</strong> {{ submission.document_count or 0 }}</p>
+        <a class="btn ghost" href="{{ url_for('track_service_request', request_id=submission.request_id, mobile=submission.mobile) }}">{{ t("Track This Application") }}</a>
+      </div>
+      {% endif %}
+
+      <form class="form ik-stack" method="post" enctype="multipart/form-data">
+        <div class="grid form-grid">
+          <label>{{ t("Applicant Name") }}
+            <input type="text" name="applicant_name" value="{{ request.form.get('applicant_name', '') }}" required>
+          </label>
+          <label>{{ t("Mobile Number") }}
+            <input type="tel" name="mobile" value="{{ request.form.get('mobile', '') }}" required>
+          </label>
+          <label>{{ t("Email") }}
+            <input type="email" name="email" value="{{ request.form.get('email', '') }}">
+          </label>
+        </div>
+
+        <div class="grid form-grid">
+          {% for field in scheme.fields %}
+          <label>
+            {{ field.label }}{% if field.required %} *{% endif %}
+            {% if field.type == 'textarea' %}
+            <textarea name="{{ field.name }}" {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %} {% if field.required %}required{% endif %}>{{ request.form.get(field.name, '') }}</textarea>
+            {% elif field.type == 'select' %}
+            <select name="{{ field.name }}" {% if field.required %}required{% endif %}>
+              <option value="">Select</option>
+              {% for option in field.options %}
+              <option value="{{ option }}" {% if request.form.get(field.name, '') == option %}selected{% endif %}>{{ option }}</option>
+              {% endfor %}
+            </select>
+            {% elif field.type == 'file' %}
+            <input type="file" name="{{ field.name }}" {% if field.required %}required{% endif %}>
+            {% else %}
+            <input type="{{ field.type }}" name="{{ field.name }}" value="{{ request.form.get(field.name, '') }}" {% if field.placeholder %}placeholder="{{ field.placeholder }}"{% endif %} {% if field.required %}required{% endif %}>
+            {% endif %}
+            {% if field.help_text %}
+            <small class="ik-helper-text">{{ field.help_text }}</small>
+            {% endif %}
+          </label>
+          {% endfor %}
+        </div>
+
+        <label>Supporting Documents
+          <input type="file" name="supporting_documents" multiple>
+        </label>
+
+        <button class="btn primary" type="submit">{{ t("Submit Application") }}</button>
+      </form>
+    </div>
+
+    <aside class="ik-service-side">
+      <div class="ik-panel">
+        <h3>Scheme Profile</h3>
+        <div class="ik-info-list">
+          <div>
+            <strong>Department</strong>
+            <p class="ik-muted">{{ scheme.department }}</p>
+          </div>
+          <div>
+            <strong>Category</strong>
+            <p class="ik-muted">{{ scheme.category }}</p>
+          </div>
+          <div>
+            <strong>Scheme Code</strong>
+            <p><span class="ik-code-pill">{{ scheme.code }}</span></p>
+          </div>
+        </div>
+      </div>
+
+      {% if scheme.intro %}
+      <div class="ik-panel">
+        <h3>About This Scheme</h3>
+        <div class="ik-rich-text">{{ scheme.intro }}</div>
+      </div>
+      {% endif %}
+
+      {% if scheme.eligibility %}
+      <div class="ik-panel">
+        <h3>Eligibility</h3>
+        <div class="ik-rich-text">{{ scheme.eligibility }}</div>
+      </div>
+      {% endif %}
+
+      {% if scheme.documents %}
+      <div class="ik-panel">
+        <h3>Required Documents</h3>
+        <div class="ik-rich-text">{{ scheme.documents }}</div>
+      </div>
+      {% endif %}
+
+      {% if scheme.instructions %}
+      <div class="ik-panel">
+        <h3>Instructions</h3>
+        <div class="ik-rich-text">{{ scheme.instructions }}</div>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

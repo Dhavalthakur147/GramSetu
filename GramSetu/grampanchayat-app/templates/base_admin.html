@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{{ t("Admin - GramSetu") }}{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}" />
+    <link rel="manifest" href="{{ url_for('web_manifest') }}" />
+    <meta name="theme-color" content="#073b2a" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body class="ik-body ik-admin-body">
+    <header class="ik-admin-header">
+      <div class="ik-wrap ik-admin-nav-row">
+        <a class="ik-brand" href="/admin">
+          <img class="ik-brand-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="{{ t('GramSetu Admin') }} logo" />
+          <span>
+            <strong>{{ t("GramSetu Admin") }}</strong>
+            <small>{{ t("Digital Operations Panel") }}</small>
+          </span>
+        </a>
+        <nav class="ik-admin-nav">
+          <a class="{% if active_page == 'admin_dashboard' %}active{% endif %}" href="/admin">{{ t("Dashboard") }}</a>
+          <a class="{% if active_page == 'admin_schemes' %}active{% endif %}" href="/admin/schemes">Schemes</a>
+          <a class="{% if active_page == 'admin_applications' %}active{% endif %}" href="/admin/applications">{{ t("Applications") }}</a>
+          <a class="{% if active_page == 'admin_complaints' %}active{% endif %}" href="/admin/complaints">{{ t("Complaints") }}</a>
+          <a class="{% if active_page == 'admin_notices' %}active{% endif %}" href="/admin/notices">{{ t("Notices") }}</a>
+          <a class="{% if active_page == 'admin_users' %}active{% endif %}" href="/admin/users">{{ t("Users") }}</a>
+          {% if auth_user %}
+          <span class="ik-user-chip">&#128100; {{ auth_user.full_name }}</span>
+          <a href="/logout">{{ t("Logout") }}</a>
+          {% else %}
+          <a href="{{ url_for('admin_login') }}">{{ t("Login") }}</a>
+          {% endif %}
+          <a href="/">{{ t("Citizen Site") }}</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ik-admin-main">
+      {% block content %}{% endblock %}
+    </main>
+    <script src="{{ url_for('static', filename='js/pwa.js') }}"></script>
+  </body>
+</html>

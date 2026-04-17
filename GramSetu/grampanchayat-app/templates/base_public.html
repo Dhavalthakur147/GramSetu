@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{{ t("GramSetu Portal") }}{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}" />
+    <link rel="manifest" href="{{ url_for('web_manifest') }}" />
+    <meta name="theme-color" content="#0c8743" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body class="ik-body">
+    <div class="ik-topbar">
+      <div class="ik-wrap ik-topbar-row">
+        <p>{{ t("Government of Gujarat | Agriculture & Farmers Welfare Department") }}</p>
+        <div class="ik-top-links">
+          <a class="{% if lang == 'gu' %}active-lang{% endif %}" href="{{ url_for('set_language', lang_code='gu', next=current_path) }}"><span aria-hidden="true">&#127760;</span> {{ t("Gujarati") }}</a>
+          <a class="{% if lang == 'en' %}active-lang{% endif %}" href="{{ url_for('set_language', lang_code='en', next=current_path) }}">{{ t("English") }}</a>
+          <a href="/contact">{{ t("Helpline") }}</a>
+          {% if auth_user %}
+          <span class="ik-user-chip">&#128100; {{ auth_user.full_name }}</span>
+          {% if auth_user.role in ['admin', 'staff'] %}
+          <a href="{{ url_for('admin_dashboard') }}">{{ t("Admin Panel") }}</a>
+          {% endif %}
+          <a href="/logout">{{ t("Logout") }}</a>
+          {% else %}
+          <a href="/login">{{ t("Login") }}</a>
+          <a href="/register">{{ t("Register") }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <header class="ik-header">
+      <div class="ik-wrap ik-nav-row">
+        <a class="ik-brand" href="/">
+          <img class="ik-brand-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="{{ t('GramSetu Portal') }} logo" />
+          <span>
+            <strong>{{ t("GramSetu Portal") }}</strong>
+            <small>{{ t("Digital Farmer Service Platform") }}</small>
+          </span>
+        </a>
+
+        <nav class="ik-nav">
+          <a class="{% if active_page == 'home' %}active{% endif %}" href="/">{{ t("Home") }}</a>
+          <a class="{% if active_page == 'about' %}active{% endif %}" href="/about">{{ t("About") }}</a>
+          <a class="{% if active_page == 'services' %}active{% endif %}" href="/services">{{ t("Services") }}</a>
+          <a class="{% if active_page == 'complaints' %}active{% endif %}" href="/complaints">{{ t("Complaints") }}</a>
+          <a class="{% if active_page == 'notices' %}active{% endif %}" href="/notices">{{ t("Notices") }}</a>
+          <a class="{% if active_page == 'dashboard' %}active{% endif %}" href="/dashboard">{{ t("Dashboard") }}</a>
+          <a class="{% if active_page == 'contact' %}active{% endif %}" href="/contact">{{ t("Contact") }}</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="ik-main">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="ik-footer">
+      <div class="ik-wrap ik-footer-grid">
+        <div>
+          <h4>{{ t("GramSetu Digital Portal") }}</h4>
+        
+        </div>
+        <div>
+          <a href="/services">{{ t("Services") }}</a>
+          <a href="/complaints">{{ t("Complaints") }}</a>
+          <a href="/dashboard">{{ t("Dashboard") }}</a>
+          <a href="{{ url_for('admin_login') }}">{{ t("Admin") }}</a>
+        </div>
+      </div>
+    </footer>
+    <section class="ik-chatbot" data-chatbot-root hidden>
+      <button class="ik-chatbot-toggle" type="button" data-chatbot-toggle>AI Help</button>
+      <div class="ik-chatbot-panel" data-chatbot-panel hidden>
+        <div class="ik-chatbot-header">
+          <strong>GramSetu Assistant</strong>
+          <button type="button" data-chatbot-close aria-label="Close chatbot">x</button>
+        </div>
+        <div class="ik-chatbot-messages" data-chatbot-messages>
+          <article class="ik-chatbot-message bot">Namaste. Services, complaints, notices, ane admin access vishe pucho.</article>
+        </div>
+        <form class="ik-chatbot-form" data-chatbot-form>
+          <input type="text" name="message" placeholder="Ask about schemes, complaints, or notices..." required />
+          <button class="btn primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+    <script src="{{ url_for('static', filename='js/pwa.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+  </body>
+</html>

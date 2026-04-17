@@ -1,0 +1,38 @@
+{% extends "base_public.html" %}
+{% set active_page = '' %}
+
+{% block title %}{{ t("Admin - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Department Login") }}</p>
+    <h1>{{ t("Admin Login") }}</h1>
+    <p>{{ t("Login with admin or staff credentials to open the digital operations panel.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-auth-wrap">
+    {% if auth_notice %}
+    <div class="alert">{{ auth_notice }}</div>
+    {% endif %}
+
+    {% if login_error %}
+    <div class="alert error">{{ login_error }}</div>
+    {% endif %}
+
+    <form class="form ik-panel" method="post" action="{{ url_for('admin_login') }}">
+      <input type="hidden" name="next" value="{{ next_url or '' }}">
+      <label>{{ t("Mobile Number") }}
+        <input type="tel" name="mobile" placeholder="{{ t('Enter registered mobile number') }}" required>
+      </label>
+      <label>{{ t("Password") }}
+        <input type="password" name="password" placeholder="{{ t('Enter password') }}" required>
+      </label>
+      <button class="btn primary" type="submit">{{ t("Login to Admin Panel") }}</button>
+      <p class="ik-muted">{{ t("Need a citizen account instead?") }} <a href="{{ url_for('login') }}">{{ t("Go to citizen login") }}</a></p>
+    </form>
+  </div>
+</section>
+{% endblock %}

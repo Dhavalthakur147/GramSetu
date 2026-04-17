@@ -1,0 +1,131 @@
+{% extends "base_admin.html" %}
+{% set active_page = 'admin_schemes' %}
+
+{% block title %}Manage Schemes - Admin{% endblock %}
+
+{% block content %}
+<section class="ik-admin-section">
+  <div class="ik-wrap ik-stack">
+    <div>
+      <h1>Government Schemes & Application Forms</h1>
+      <p class="ik-muted">Create department-wise schemes, build application forms in JSON, and publish them directly to the citizen portal.</p>
+    </div>
+
+    {% if admin_message %}
+    <div class="alert">{{ admin_message }}</div>
+    {% endif %}
+    {% if admin_error %}
+    <div class="alert error">{{ admin_error }}</div>
+    {% endif %}
+
+    <div class="ik-admin-split">
+      <div class="ik-panel">
+        <div class="ik-title-row">
+          <h2>{% if editing_scheme %}Edit Scheme{% else %}Create Scheme{% endif %}</h2>
+          {% if editing_scheme %}
+          <a href="{{ url_for('admin_schemes') }}">Create New</a>
+          {% endif %}
+        </div>
+        <p class="ik-helper-text">Applicant name, mobile number, and email fields are added automatically on every public application form.</p>
+        <form class="form ik-stack" method="post">
+          <input type="hidden" name="action" value="{% if editing_scheme %}update{% else %}create{% endif %}">
+          {% if editing_scheme %}
+          <input type="hidden" name="scheme_id" value="{{ editing_scheme.id }}">
+          {% endif %}
+
+          <div class="grid form-grid">
+            <label>Scheme Code
+              <input type="text" name="code" value="{{ request.form.get('code', editing_scheme.code if editing_scheme else '') }}" {% if editing_scheme %}readonly{% endif %} placeholder="solar_pump_subsidy" required>
+            </label>
+            <label>Public Slug
+              <input type="text" name="slug" value="{{ request.form.get('slug', editing_scheme.slug if editing_scheme else '') }}" {% if editing_scheme %}readonly{% endif %} placeholder="solar-pump-subsidy">
+            </label>
+            <label>Scheme Title
+              <input type="text" name="title" value="{{ request.form.get('title', editing_scheme.title if editing_scheme else '') }}" required>
+            </label>
+            <label>Department
+              <input type="text" name="department" value="{{ request.form.get('department', editing_scheme.department if editing_scheme else 'Gram Panchayat') }}">
+            </label>
+            <label>Category
+              <input type="text" name="category" value="{{ request.form.get('category', editing_scheme.category if editing_scheme else 'Government Scheme') }}">
+            </label>
+            <label>Public Status
+              <select name="is_published">
+                <option value="1" {% if request.form.get('is_published', '1' if (editing_scheme and editing_scheme.is_published) or not editing_scheme else '') == '1' %}selected{% endif %}>Published</option>
+                <option value="" {% if request.form.get('is_published', '1' if (editing_scheme and editing_scheme.is_published) or not editing_scheme else '') != '1' %}selected{% endif %}>Draft</option>
+              </select>
+            </label>
+          </div>
+
+          <label>Short Summary
+            <textarea name="summary" rows="4" required>{{ request.form.get('summary', editing_scheme.summary if editing_scheme else '') }}</textarea>
+          </label>
+
+          <label>Intro / Government Context
+            <textarea name="intro" rows="4" placeholder="Explain the objective of the scheme.">{{ request.form.get('intro', editing_scheme.intro if editing_scheme else '') }}</textarea>
+          </label>
+
+          <label>Eligibility
+            <textarea name="eligibility" rows="4" placeholder="List eligibility conditions.">{{ request.form.get('eligibility', editing_scheme.eligibility if editing_scheme else '') }}</textarea>
+          </label>
+
+          <label>Required Documents
+            <textarea name="documents" rows="4" placeholder="Mention documents citizens should keep ready.">{{ request.form.get('documents', editing_scheme.documents if editing_scheme else '') }}</textarea>
+          </label>
+
+          <label>Instructions
+            <textarea name="instructions" rows="4" placeholder="Write verification or submission instructions.">{{ request.form.get('instructions', editing_scheme.instructions if editing_scheme else '') }}</textarea>
+          </label>
+
+          <label>Form Fields JSON
+            <textarea name="fields_json" rows="16" required>{{ request.form.get('fields_json', editing_scheme.fields_json_text if editing_scheme else field_config_example) }}</textarea>
+          </label>
+
+          <div class="actions">
+            <button class="btn primary" type="submit">{% if editing_scheme %}Update Scheme{% else %}Create Scheme{% endif %}</button>
+            {% if editing_scheme %}
+            <a class="btn ghost" href="{{ url_for('admin_schemes') }}">Cancel</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+
+      <div class="ik-panel">
+        <h2>Live Scheme Catalog</h2>
+        <div class="table">
+          <div class="table-row table-6 head"><div>Code</div><div>Scheme</div><div>Department</div><div>Fields</div><div>Status</div><div>Action</div></div>
+          {% for scheme in schemes %}
+          <div class="table-row table-6">
+            <div><span class="ik-code-pill">{{ scheme.code }}</span></div>
+            <div>
+              <strong>{{ scheme.title }}</strong>
+              <p class="ik-muted">{{ scheme.category }}</p>
+            </div>
+            <div>{{ scheme.department }}</div>
+            <div>{{ scheme.field_count }} fields</div>
+            <div>
+              <span class="ik-badge {% if scheme.is_published %}live{% else %}offline{% endif %}">
+                {% if scheme.is_published %}Published{% else %}Draft{% endif %}
+              </span>
+            </div>
+            <div class="actions">
+              <a class="btn ghost" href="{{ url_for('admin_schemes', edit=scheme.id) }}">Edit</a>
+              {% if scheme.is_published %}
+              <a class="btn ghost" href="{{ url_for('dynamic_service_application', scheme_slug=scheme.slug) }}" target="_blank" rel="noreferrer">Open</a>
+              {% endif %}
+              <form method="post">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="scheme_id" value="{{ scheme.id }}">
+                <button class="btn ghost" type="submit">Delete</button>
+              </form>
+            </div>
+          </div>
+          {% else %}
+          <div class="table-row table-6"><div>No schemes created yet.</div><div>-</div><div>-</div><div>-</div><div>-</div><div>-</div></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

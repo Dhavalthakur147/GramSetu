@@ -1,0 +1,21 @@
+{
+  "name": "GramSetu Mobile",
+  "short_name": "GramSetu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#edf3ef",
+  "theme_color": "#0c8743",
+  "description": "Mobile-ready GramSetu portal for services, complaints, notices, and admin operations.",
+  "icons": [
+    {
+      "src": "/static/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: grampanchayat-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: SECRET_KEY
+        sync: false
+      - key: MYSQL_HOST
+        sync: false
+      - key: MYSQL_PORT
+        value: "3306"
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false
+      - key: MYSQL_DB
+        sync: false
+      - key: MYSQL_CHARSET
+        value: utf8mb4
+      - key: MAX_CONTENT_LENGTH_MB
+        value: "16"
+      - key: FLASK_DEBUG
+        value: "0"

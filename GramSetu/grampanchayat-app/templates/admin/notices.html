@@ -1,0 +1,114 @@
+{% extends "base_admin.html" %}
+{% set active_page = 'admin_notices' %}
+
+{% block title %}Manage Notices - Admin{% endblock %}
+
+{% block content %}
+<section class="ik-admin-section">
+  <div class="ik-wrap ik-stack">
+    <div>
+      <h1>Manage Notices</h1>
+      <p class="ik-muted">Publish public circulars, village updates, and government-style notice board announcements.</p>
+    </div>
+
+    {% if admin_message %}
+    <div class="alert">{{ admin_message }}</div>
+    {% endif %}
+    {% if admin_error %}
+    <div class="alert error">{{ admin_error }}</div>
+    {% endif %}
+
+    <div class="ik-admin-split">
+      <div class="ik-panel">
+        <div class="ik-title-row">
+          <h2>{% if editing_notice %}Edit Notice{% else %}Create Notice{% endif %}</h2>
+          {% if editing_notice %}
+          <a href="{{ url_for('admin_notices') }}">Create New</a>
+          {% endif %}
+        </div>
+        <form class="form ik-stack" method="post">
+          <input type="hidden" name="action" value="{% if editing_notice %}update{% else %}create{% endif %}">
+          {% if editing_notice %}
+          <input type="hidden" name="notice_id" value="{{ editing_notice.id }}">
+          {% endif %}
+
+          <div class="grid form-grid">
+            <label>Notice Title
+              <input type="text" name="title" value="{{ request.form.get('title', editing_notice.title if editing_notice else '') }}" required>
+            </label>
+            <label>Reference No.
+              <input type="text" name="reference_no" value="{{ request.form.get('reference_no', editing_notice.reference_no if editing_notice else '') }}" placeholder="GP/NOTICE/2026/01">
+            </label>
+            <label>Issued Date
+              <input type="date" name="issued_on" value="{{ request.form.get('issued_on', editing_notice.issued_on.isoformat() if editing_notice else '') }}" required>
+            </label>
+            <label>Download URL
+              <input type="text" name="download_url" value="{{ request.form.get('download_url', editing_notice.download_url if editing_notice else '') }}" placeholder="/static/notices/sample.pdf or https://...">
+            </label>
+          </div>
+
+          <label>Summary
+            <textarea name="summary" rows="4" required>{{ request.form.get('summary', editing_notice.summary if editing_notice else '') }}</textarea>
+          </label>
+
+          <label>Detailed Body
+            <textarea name="body" rows="7" placeholder="Write the detailed notice text for citizens.">{{ request.form.get('body', editing_notice.body if editing_notice else '') }}</textarea>
+          </label>
+
+          <label class="ik-checkbox">
+            <input type="checkbox" name="is_published" value="1" {% if request.form.get('is_published', '1' if (editing_notice and editing_notice.is_published) or not editing_notice else '') %}checked{% endif %}>
+            Publish this notice on the public website
+          </label>
+
+          <div class="actions">
+            <button class="btn primary" type="submit">{% if editing_notice %}Update Notice{% else %}Publish Notice{% endif %}</button>
+            {% if editing_notice %}
+            <a class="btn ghost" href="{{ url_for('admin_notices') }}">Cancel</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+
+      <div class="ik-panel">
+        <h2>Published + Draft Notices</h2>
+        <div class="table">
+          <div class="table-row table-5 head"><div>Notice</div><div>Issued</div><div>Status</div><div>Download</div><div>Action</div></div>
+          {% for notice in notices %}
+          <div class="table-row table-5">
+            <div>
+              <strong>{{ notice.title }}</strong>
+              {% if notice.reference_no %}
+              <p class="ik-muted">{{ notice.reference_no }}</p>
+              {% endif %}
+            </div>
+            <div>{{ notice.issued_on.strftime('%d %b %Y') }}</div>
+            <div>
+              <span class="ik-badge {% if notice.is_published %}live{% else %}offline{% endif %}">
+                {% if notice.is_published %}Published{% else %}Draft{% endif %}
+              </span>
+            </div>
+            <div>
+              {% if notice.download_url %}
+              <a href="{{ notice.download_url }}" target="_blank" rel="noreferrer">Open Link</a>
+              {% else %}
+              -
+              {% endif %}
+            </div>
+            <div class="actions">
+              <a class="btn ghost" href="{{ url_for('admin_notices', edit=notice.id) }}">Edit</a>
+              <form method="post">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="notice_id" value="{{ notice.id }}">
+                <button class="btn ghost" type="submit">Delete</button>
+              </form>
+            </div>
+          </div>
+          {% else %}
+          <div class="table-row table-5"><div>No notices created yet.</div><div>-</div><div>-</div><div>-</div><div>-</div></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

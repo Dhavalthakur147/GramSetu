@@ -1,0 +1,38 @@
+{% extends "base_public.html" %}
+{% set active_page = 'notices' %}
+
+{% block title %}{{ t("Notices - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Public Notices") }}</p>
+    <h1>{{ t("Official Circulars and Updates") }}</h1>
+    <p>{{ t("Download latest circulars and notifications issued for the village.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-stack">
+    {% for notice in notices %}
+    <article class="ik-panel">
+      <div class="ik-title-row">
+        <h3>{{ notice.title }}</h3>
+        {% if notice.download_url %}
+        <a class="ik-btn ik-btn-mini" href="{{ notice.download_url }}" target="_blank" rel="noreferrer">{{ t("Download PDF") }}</a>
+        {% endif %}
+      </div>
+      <p class="ik-muted">Issued: {{ notice.issued_on.strftime('%d %b %Y') }}{% if notice.reference_no %} | Ref: {{ notice.reference_no }}{% endif %}</p>
+      <p>{{ notice.summary }}</p>
+      {% if notice.body %}
+      <div class="ik-rich-text">{{ notice.body }}</div>
+      {% endif %}
+    </article>
+    {% else %}
+    <article class="ik-panel ik-empty-state">
+      <p>No notices have been published yet.</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

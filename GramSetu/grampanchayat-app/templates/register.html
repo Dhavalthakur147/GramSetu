@@ -1,0 +1,45 @@
+{% extends "base_public.html" %}
+{% set active_page = '' %}
+
+{% block title %}{{ t("Register - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Account Access") }}</p>
+    <h1>{{ t("Citizen Registration") }}</h1>
+    <p>{{ t("Create your account and start using GramSetu online services.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-auth-wrap">
+    {% if register_error %}
+    <div class="alert error">{{ register_error }}</div>
+    {% endif %}
+    {% if register_success %}
+    <div class="alert">{{ register_success }}</div>
+    {% endif %}
+
+    <form class="form ik-panel" method="post" action="{{ url_for('register') }}">
+      <label>{{ t("Full Name") }}
+        <input type="text" name="full_name" placeholder="{{ t('Enter full name') }}" required>
+      </label>
+      <label>{{ t("Mobile Number") }}
+        <input type="tel" name="mobile" placeholder="{{ t('Enter mobile number') }}" required>
+      </label>
+      <label>{{ t("Email (Optional)") }}
+        <input type="email" name="email" placeholder="{{ t('Enter email address') }}">
+      </label>
+      <label>{{ t("Password") }}
+        <input type="password" name="password" placeholder="{{ t('Create password') }}" required>
+      </label>
+      <label>{{ t("Confirm Password") }}
+        <input type="password" name="confirm_password" placeholder="{{ t('Re-enter password') }}" required>
+      </label>
+      <button class="btn primary" type="submit">{{ t("Create Account") }}</button>
+      <p class="ik-muted">{{ t("Already registered?") }} <a href="{{ url_for('login') }}">{{ t("Login here") }}</a></p>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base_public.html" %}
+{% set active_page = 'dashboard' %}
+
+{% block title %}{{ t("Digital Dashboard - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Digital Dashboard") }}</p>
+    <h1>{{ t("Live Service Monitoring") }}</h1>
+    <p>{{ t("Real-time visibility of applications, complaints, and service efficiency.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-grid-4">
+    <article><h3>{{ metrics.total_requests }}</h3><p>{{ t("Total Service Requests") }}</p></article>
+    <article><h3>{{ metrics.pending_requests }}</h3><p>{{ t("Pending Requests") }}</p></article>
+    <article><h3>{{ metrics.total_complaints }}</h3><p>{{ t("Total Complaints") }}</p></article>
+    <article><h3>{{ metrics.digital_efficiency }}%</h3><p>{{ t("Digital Efficiency") }}</p></article>
+  </div>
+</section>
+
+<section class="ik-section ik-alt">
+  <div class="ik-wrap">
+    <h2>{{ t("Recent Service Requests") }}</h2>
+    <div class="table">
+      <div class="table-row table-5 head">
+        <div>{{ t("Request ID") }}</div>
+        <div>{{ t("Applicant") }}</div>
+        <div>{{ t("Service") }}</div>
+        <div>{{ t("Status") }}</div>
+        <div>{{ t("Submitted") }}</div>
+      </div>
+      {% for row in recent_requests %}
+      <div class="table-row table-5">
+        <div>{{ row.request_id }}</div>
+        <div>{{ row.applicant_name }}</div>
+        <div>{{ row.service_name }}</div>
+        <div><span class="status-badge status-{{ row.status }}">{{ status_text(row.status) }}</span></div>
+        <div>{{ row.submitted_at }}</div>
+      </div>
+      {% else %}
+      <div class="table-row table-5"><div>{{ t("No requests yet.") }}</div><div>-</div><div>-</div><div>-</div><div>-</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap">
+    <h2>{{ t("Recent Complaints") }}</h2>
+    <div class="table">
+      <div class="table-row table-5 head">
+        <div>{{ t("Complaint ID") }}</div>
+        <div>{{ t("Citizen") }}</div>
+        <div>{{ t("Category") }}</div>
+        <div>{{ t("Status") }}</div>
+        <div>{{ t("Updated") }}</div>
+      </div>
+      {% for row in recent_complaints %}
+      <div class="table-row table-5">
+        <div>{{ row.complaint_id }}</div>
+        <div>{{ row.full_name }}</div>
+        <div>{{ row.category }}</div>
+        <div><span class="status-badge status-{{ row.status }}">{{ status_text(row.status) }}</span></div>
+        <div>{{ row.updated_at }}</div>
+      </div>
+      {% else %}
+      <div class="table-row table-5"><div>{{ t("No complaints yet.") }}</div><div>-</div><div>-</div><div>-</div><div>-</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

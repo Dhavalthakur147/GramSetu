@@ -1,0 +1,138 @@
+{% extends "base_admin.html" %}
+{% set active_page = 'admin_dashboard' %}
+
+{% block title %}Admin Dashboard - GramSetu{% endblock %}
+
+{% block content %}
+<section class="ik-admin-section">
+  <div class="ik-wrap ik-stack">
+    <h1>Admin Dashboard</h1>
+    <div class="ik-grid-4">
+      <article><h3>{{ metrics.total_requests }}</h3><p>Total Applications</p></article>
+      <article><h3>{{ metrics.pending_requests }}</h3><p>Pending Requests</p></article>
+      <article><h3>{{ metrics.total_complaints }}</h3><p>Total Complaints</p></article>
+      <article><h3>{{ metrics.digital_efficiency }}%</h3><p>Digital Efficiency</p></article>
+      <article><h3>{{ metrics.published_schemes }}</h3><p>Live Schemes</p></article>
+      <article><h3>{{ metrics.published_notices }}</h3><p>Public Notices</p></article>
+      <article><h3>{{ metrics.total_users }}</h3><p>Total Users</p></article>
+      <article><h3>{{ metrics.total_documents }}</h3><p>Uploaded Documents</p></article>
+      <article><h3>{{ metrics.successful_alerts }}</h3><p>Alerts Sent</p></article>
+    </div>
+
+    <div class="ik-panel">
+      <h2>Quick Admin Actions</h2>
+      <div class="ik-admin-links">
+        <a class="btn primary" href="/admin/schemes">Create Scheme Form</a>
+        <a class="btn primary" href="/admin/notices">Publish Notice</a>
+        <a class="btn ghost" href="/admin/users">Manage Users</a>
+        <a class="btn ghost" href="/services">Citizen Service Portal</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ik-admin-section">
+  <div class="ik-wrap">
+    <h2>Recent Email & SMS Alerts</h2>
+    <div class="table">
+      <div class="table-row table-4 head"><div>Event</div><div>Channel</div><div>Recipient</div><div>Status</div></div>
+      {% for alert in latest_alerts %}
+      <div class="table-row table-4">
+        <div>{{ alert.event_code.replace('_', ' ')|title }}</div>
+        <div>{{ alert.channel.upper() }}</div>
+        <div>{{ alert.recipient }}</div>
+        <div>
+          <span class="ik-badge {% if alert.status == 'sent' %}live{% else %}offline{% endif %}">
+            {{ alert.status.title() }}
+          </span>
+        </div>
+      </div>
+      {% else %}
+      <div class="table-row table-4"><div>No alerts logged yet.</div><div>-</div><div>-</div><div>-</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="ik-admin-section ik-alt">
+  <div class="ik-wrap ik-admin-split">
+    <div class="ik-panel">
+      <h2>Latest Scheme Forms</h2>
+      <div class="ik-stack">
+        {% for scheme in latest_schemes %}
+        <article class="ik-panel">
+          <div class="ik-title-row">
+            <h3>{{ scheme.title }}</h3>
+            <span class="ik-badge {% if scheme.is_published %}live{% else %}offline{% endif %}">
+              {% if scheme.is_published %}Published{% else %}Draft{% endif %}
+            </span>
+          </div>
+          <p class="ik-muted">{{ scheme.department }} | {{ scheme.category }}</p>
+          <p>{{ scheme.summary }}</p>
+        </article>
+        {% else %}
+        <div class="ik-panel ik-empty-state"><p>No scheme forms created yet.</p></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="ik-panel">
+      <h2>Latest Notices</h2>
+      <div class="ik-stack">
+        {% for notice in latest_notices %}
+        <article class="ik-panel">
+          <div class="ik-title-row">
+            <h3>{{ notice.title }}</h3>
+            <span class="ik-badge {% if notice.is_published %}live{% else %}offline{% endif %}">
+              {% if notice.is_published %}Published{% else %}Draft{% endif %}
+            </span>
+          </div>
+          <p class="ik-muted">{{ notice.issued_on.strftime('%d %b %Y') }}</p>
+          <p>{{ notice.summary }}</p>
+        </article>
+        {% else %}
+        <div class="ik-panel ik-empty-state"><p>No notices available yet.</p></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ik-admin-section">
+  <div class="ik-wrap">
+    <h2>Recent Complaints</h2>
+    <div class="table">
+      <div class="table-row table-4 head"><div>Complaint ID</div><div>Citizen</div><div>Status</div><div>Department</div></div>
+      {% for row in latest_complaints %}
+      <div class="table-row table-4">
+        <div>{{ row.complaint_id }}</div>
+        <div>{{ row.full_name }}</div>
+        <div><span class="status-badge status-{{ row.status }}">{{ row.status.replace('_', ' ')|title }}</span></div>
+        <div>{{ row.assigned_department }}</div>
+      </div>
+      {% else %}
+      <div class="table-row table-4"><div>No complaints yet.</div><div>-</div><div>-</div><div>-</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="ik-admin-section ik-alt">
+  <div class="ik-wrap">
+    <h2>Recent Applications</h2>
+    <div class="table">
+      <div class="table-row table-4 head"><div>Request ID</div><div>Applicant</div><div>Status</div><div>Service</div></div>
+      {% for row in latest_applications %}
+      <div class="table-row table-4">
+        <div>{{ row.request_id }}</div>
+        <div>{{ row.applicant_name }}</div>
+        <div><span class="status-badge status-{{ row.status }}">{{ row.status.replace('_', ' ')|title }}</span></div>
+        <div>{{ row.service_name }}</div>
+      </div>
+      {% else %}
+      <div class="table-row table-4"><div>No applications yet.</div><div>-</div><div>-</div><div>-</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

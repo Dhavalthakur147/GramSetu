@@ -1,0 +1,34 @@
+{% extends "base_public.html" %}
+{% set active_page = '' %}
+
+{% block title %}{{ t("Login - GramSetu") }}{% endblock %}
+
+{% block content %}
+<section class="ik-page-hero">
+  <div class="ik-wrap">
+    <p class="ik-kicker">{{ t("Account Access") }}</p>
+    <h1>{{ t("Citizen Login") }}</h1>
+    <p>{{ t("Login to access your profile, track requests, and use digital services.") }}</p>
+  </div>
+</section>
+
+<section class="ik-section">
+  <div class="ik-wrap ik-auth-wrap">
+    {% if login_error %}
+    <div class="alert error">{{ login_error }}</div>
+    {% endif %}
+
+    <form class="form ik-panel" method="post" action="{{ url_for('login') }}">
+      <input type="hidden" name="next" value="{{ next_url or '' }}">
+      <label>{{ t("Mobile Number") }}
+        <input type="tel" name="mobile" placeholder="{{ t('Enter registered mobile number') }}" required>
+      </label>
+      <label>{{ t("Password") }}
+        <input type="password" name="password" placeholder="{{ t('Enter password') }}" required>
+      </label>
+      <button class="btn primary" type="submit">{{ t("Login") }}</button>
+      <p class="ik-muted">{{ t("Don't have an account?") }} <a href="{{ url_for('register') }}">{{ t("Create account") }}</a></p>
+    </form>
+  </div>
+</section>
+{% endblock %}
